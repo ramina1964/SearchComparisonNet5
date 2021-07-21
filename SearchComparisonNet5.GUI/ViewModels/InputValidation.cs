@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
-using SearchComparisonNet5.Kernel.Properties;
+using System.Globalization;
 
 namespace SearchComparisonNet5.GUI.ViewModels
 {
     public class InputValidation : AbstractValidator<MainViewModel>
     {
-        public InputValidation() => ValidationRules();
-
         public static int MinNoOfEntries => 1000;
 
         public static int MaxNoOfEntries => 10000000;
@@ -15,29 +13,51 @@ namespace SearchComparisonNet5.GUI.ViewModels
 
         public static int MaxNoOfSearches => 1000000;
 
-        private void ValidationRules()
-        {
-            // No. of Entries
-            _ = RuleFor(sm => sm.NoOfEntries)
-                .NotEmpty()
-                .WithMessage(sm => string.Format(Resources.ValueNullOrWhiteSpaceError, nameof(sm.NoOfEntries)))
-                .Must(noOfEntries => int.TryParse(noOfEntries.ToString(), out int _))
-                .WithMessage(sm => string.Format(Resources.InvalidIntegerError, nameof(sm.NoOfEntries)))
-                .Must(noOfEntries => noOfEntries >= MinNoOfEntries)
-                .WithMessage(sm => string.Format(Resources.NoOfEntriesTooSmallError, nameof(sm.NoOfEntries), MinNoOfEntries))
-                .Must(noOfEntries => noOfEntries <= MaxNoOfEntries)
-                .WithMessage(sm => string.Format(Resources.NoOfEntriesTooSmallError, nameof(sm.NoOfEntries), MaxNoOfEntries));
+        public static int MinEntryValue => 0;
 
-            // No. of Searches
-            _ = RuleFor(sm => sm.NoOfSearches)
-                .NotEmpty()
-                .WithMessage(sm => string.Format(Resources.ValueNullOrWhiteSpaceError, nameof(sm.NoOfSearches)))
-                .Must(noOfSearches => int.TryParse(noOfSearches.ToString(), out int _))
-                .WithMessage(sm => string.Format(Resources.InvalidIntegerError, nameof(sm.NoOfSearches)))
-                .Must(noOfSearches => noOfSearches >= MinNoOfSearches)
-                .WithMessage(sm => string.Format(Resources.NoOfSearchesTooSmallError, nameof(sm.NoOfSearches), MinNoOfSearches))
-                .Must(noOfSearches => int.Parse(noOfSearches.ToString()) <= MaxNoOfSearches)
-                .WithMessage(sm => string.Format(Resources.NoOfSearchesTooLargeError, nameof(sm.NoOfSearches), MaxNoOfSearches));
+        public static int MaxEntryValue => int.MaxValue;
+
+        private static string NullOrEmptyNoOfEntriesMsg => "NoOfEntriesText is a required field.";
+
+        private static string NullOrEmptyNoOfSearchesMsg => $"NoOfSearchesText is a required field.";
+
+        private static string InvalidNoOfEntriesMsg => "NoOfEntriesText must be a valid integer.";
+
+        private static string InvalidNoOfSearchesMsg => "NoOfSearchesText must be a valid integer.";
+
+        private static string OutOfRangeNoOfEntriesMsg => "NoOfEntriesText must be an integer in the " +
+                                                         $"interval [{MinNoOfEntries}, {MaxNoOfEntries}].";
+
+        private static string OutOfRangeNoOfSearchesMsg => "NoOfSearchesText must be an integer in the " +
+                                                          $"interval [{MinNoOfSearches}, {MaxNoOfSearches}].";
+
+        public InputValidation()
+        {
+            RuleSet("RuleForNoOfEntries", () =>
+            {
+                _ = RuleFor(vm => vm.NoOfEntriesText)
+                    .NotNull().NotEmpty()
+                    .WithMessage(NullOrEmptyNoOfEntriesMsg)
+                    .Must(value => int.TryParse(value.ToString(), out _))
+                    .WithMessage(InvalidNoOfEntriesMsg)
+                    .Must(value => MinNoOfEntries <= int.Parse(value, CultureInfo.InvariantCulture) &&
+                        int.Parse(value, CultureInfo.InvariantCulture) <= MaxNoOfEntries)
+                    .WithMessage(OutOfRangeNoOfEntriesMsg);
+            });
+
+
+            // NoofSearches
+            RuleSet("RuleForNoOfSearches", () =>
+            {
+                _ = RuleFor(vm => vm.NoOfSearchesText)
+               .NotNull().NotEmpty()
+               .WithMessage(NullOrEmptyNoOfSearchesMsg)
+               .Must(value => int.TryParse(value.ToString(), out _))
+               .WithMessage(InvalidNoOfSearchesMsg)
+               .Must(value => MinNoOfSearches <= int.Parse(value, CultureInfo.InvariantCulture) &&
+                   int.Parse(value, CultureInfo.InvariantCulture) <= MaxNoOfSearches)
+               .WithMessage(OutOfRangeNoOfSearchesMsg);
+            });
         }
     }
 }

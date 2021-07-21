@@ -38,8 +38,8 @@
                         <DockPanel >
                             <Label Style="{StaticResource LabelStyle}" Content="No. of Entries" />
                             <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="35"
-                                     Text="{Binding NoOfEntries, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True,
-                                            Converter={StaticResource NumStringConverter}}"
+                                     Text="{Binding NoOfEntriesText, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
+                                            ValidatesOnNotifyDataErrors=True, Converter={StaticResource NumStringConverter}}"
                                      IsEnabled="{Binding IsSimulating, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                                 ValidatesOnNotifyDataErrors=True, Converter={StaticResource NegativeConverter}}" />
                         </DockPanel>
@@ -47,7 +47,7 @@
                         <DockPanel >
                             <Label Style="{StaticResource LabelStyle}" Content="No. of Searches" />
                             <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="35"
-                                     Text="{Binding NoOfSearches, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True,
+                                     Text="{Binding NoOfSearchesText, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True,
                                             Converter={StaticResource NumStringConverter}}"
                                      IsEnabled="{Binding IsSimulating, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                                 ValidatesOnNotifyDataErrors=True, Converter={StaticResource NegativeConverter}}" />
@@ -161,10 +161,9 @@
 
                         <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Top" Content="Simulate Searches"
                                 Command="{Binding SimulateCommand, UpdateSourceTrigger=PropertyChanged}"
-								IsEnabled="{Binding IsSimulating, Converter={StaticResource NegativeConverter}}" />
+                                IsEnabled="{Binding IsSimulating, Converter={StaticResource NegativeConverter}}"/>
                         <Button Style="{StaticResource ButtonStyle}" DockPanel.Dock="Bottom" Margin="0, 5, 0, 0" Content="Cancel"
-								Command="{Binding CancelCommand, UpdateSourceTrigger=PropertyChanged}"
-                                IsEnabled="{Binding IsSimulating}" />
+								Command="{Binding CancelCommand, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </GroupBox>
 

@@ -3,14 +3,13 @@ using FluentValidation.Results;
 using Microsoft.Toolkit.Mvvm.Input;
 using SearchComparisonNet5.Kernel.Interfaces;
 using SearchComparisonNet5.Kernel.Models;
-using SearchComparisonNet5.Kernel.Properties;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SearchComparisonNet5.GUI.ViewModels
 {
@@ -22,9 +21,9 @@ namespace SearchComparisonNet5.GUI.ViewModels
             SimulateCommand = new RelayCommand(Simulate, CanSimulate);
             CancelCommand = new RelayCommand(Cancel, CanCancel);
 
-            InputValidation = new InputValidation { CascadeMode = CascadeMode.Stop };
-            NoOfEntries = (int)5e5;
-            NoOfSearches = (int)1e3;
+            InputValidation = new InputValidation() { CascadeMode = CascadeMode.Stop };
+            NoOfEntriesText = "500000";
+            NoOfSearchesText = "1000";
 
             IsSimulating = false;
             ProgressBarVisibility = Visibility.Hidden;
@@ -42,7 +41,11 @@ namespace SearchComparisonNet5.GUI.ViewModels
         public bool IsSimulating
         {
             get => _isSimulating;
-            set => SetProperty(ref _isSimulating, value);
+            set
+            {
+                SetProperty(ref _isSimulating, value);
+                _ = Application.Current.Dispatcher.BeginInvoke(() => CancelCommand.NotifyCanExecuteChanged());
+            }
         }
 
         public Visibility ProgressBarVisibility
@@ -68,31 +71,56 @@ namespace SearchComparisonNet5.GUI.ViewModels
 
         public ISimulationResults BinarySearchResults { get; set; }
 
+        public string NoOfEntriesText
+        {
+            get => _noOfEntriesText;
+            set
+            {
+                var isSet = SetProperty(ref _noOfEntriesText, value);
+                if (!isSet) return;
+
+                ValidationResult = InputValidation.Validate(this, option => option.IncludeRuleSets("RuleForNoOfEntries"));
+                IsNoOfEntriesValid = ValidationResult.IsValid;
+                SimulateCommand.NotifyCanExecuteChanged();
+
+                if (IsNoOfEntriesValid)
+                {
+                    _ = SetProperty(ref _noOfEntries, int.Parse(value));
+                    OnPropertyChanged(nameof(NoOfEntries));
+                }
+            }
+        }
+
+        public string NoOfSearchesText
+        {
+            get => _noOfSearchesText;
+            set
+            {
+                var isSet = SetProperty(ref _noOfSearchesText, value);
+                if (!isSet) return;
+
+                ValidationResult = InputValidation.Validate(this, options => options.IncludeRuleSets("RuleForNoOfSearches"));
+                IsNoOfSearchesValid = ValidationResult.IsValid;
+                SimulateCommand.NotifyCanExecuteChanged();
+
+                if (IsNoOfSearchesValid)
+                {
+                    _ = SetProperty(ref _noOfSearches, int.Parse(value));
+                    OnPropertyChanged(nameof(NoOfSearches));
+                }
+            }
+        }
+
         public int NoOfEntries
         {
             get => _noOfEntries;
             set => SetProperty(ref _noOfEntries, value);
-            //set
-            //{
-            //    var isSet = SetProperty(ref _noOfEntries, value);
-            //    if (!isSet) return;
-
-            //    ValidationResult = InputValidation.Validate(this);
-            //    IsInputValid = ValidationResult.IsValid;
-            //    SimulateCommand.NotifyCanExecuteChanged();
-            //}
         }
 
         public int NoOfSearches
         {
             get => _noOfSearches;
-            set
-            {
-                SetProperty(ref _noOfSearches, value);
-                ValidationResult = InputValidation.Validate(this);
-                IsInputValid = ValidationResult.IsValid;
-                SimulateCommand.NotifyCanExecuteChanged();
-            }
+            set => SetProperty(ref _noOfSearches, value);
         }
 
         public int TargetValue
@@ -146,50 +174,8 @@ namespace SearchComparisonNet5.GUI.ViewModels
         }
 
         /***************************************** Private Methods *****************************************/
-        private void DataValidation()
-        {
-            // Validate No. of Entries property
-            if (PropErrors.TryGetValue(nameof(NoOfEntries), out var listErrors) == false)
-                listErrors = new List<string>();
-
-            else
-                listErrors.Clear();
-
-            if (string.IsNullOrEmpty(nameof(NoOfEntries)))
-                listErrors.Add("No. of Entries is required.");
-
-            if (InputValidation.MinNoOfEntries > NoOfEntries || NoOfEntries > InputValidation.MaxNoOfEntries)
-                listErrors.Add(Resources.NoOfEntriesTooSmallError);
-
-            PropErrors[nameof(NoOfEntries)] = listErrors;
-
-            if (listErrors.Count > 0)
-            {
-                OnPropertyErrorsChanged(nameof(NoOfEntries));
-            }
-
-            // Validate No. of Searches property
-            if (PropErrors.TryGetValue(nameof(NoOfSearches), out listErrors) == false)
-                listErrors = new List<string>();
-
-            else
-                listErrors.Clear();
-
-            if (string.IsNullOrEmpty(nameof(NoOfSearches)))
-                listErrors.Add("No. of Searches is required.");
-
-            if (InputValidation.MinNoOfSearches > NoOfSearches || NoOfSearches > InputValidation.MaxNoOfSearches)
-                listErrors.Add(Resources.NoOfSearchesTooLargeError);
-
-            PropErrors[nameof(NoOfSearches)] = listErrors;
-
-            if (listErrors.Count > 0)
-            {
-                OnPropertyErrorsChanged(nameof(NoOfSearches));
-            }
-        }
-
-        private bool CanSimulate() => !IsSimulating && IsInputValid;
+        //private bool CanSimulate() => !IsSimulating && IsNoOfEntriesValid && IsNoOfSearchesValid;
+        private bool CanSimulate() => !IsSimulating && IsNoOfEntriesValid && IsNoOfSearchesValid;
 
         private bool CanCancel() => IsSimulating;
 
@@ -324,21 +310,33 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 : sb.Append(BinarySearch[toIndex] + ", ");
         }
 
-        private bool IsInputValid
-        {
-            get => _isInputValid;
-            set
-            {
-                SetProperty(ref _isInputValid, value);
-                SimulateCommand.NotifyCanExecuteChanged();
-            }
-        }
-
         private LinearSearch LinearSearch { get; set; }
 
         private BinarySearch BinarySearch { get; set; }
 
         public ValidationResult ValidationResult { get; set; }
+
+        private bool IsNoOfEntriesValid
+        {
+            get => _isNoOfEntriesValid;
+            set
+            {
+                var _isSet = SetProperty(ref _isNoOfEntriesValid, value);
+                if (_isSet)
+                { SimulateCommand.NotifyCanExecuteChanged(); }
+            }
+        }
+
+        public bool IsNoOfSearchesValid
+        {
+            get => _isNoOfSearchesValid;
+            set
+            {
+                var _isSet = SetProperty(ref _isNoOfSearchesValid, value);
+                if (_isSet)
+                { SimulateCommand.NotifyCanExecuteChanged(); }
+            }
+        }
 
         /***************************************** Private Fields ******************************************/
         private static readonly long MinProductValue = (long)1e5;
@@ -347,8 +345,12 @@ namespace SearchComparisonNet5.GUI.ViewModels
             $"Product of No. of searches and No. of entries must be in the interval [{MinProductValue}, {MaxProductValue}].";
 
         private int _targetValue;
+        private string _noOfEntriesText;
+        private string _noOfSearchesText;
         private int _noOfEntries;
         private int _noOfSearches;
+        private bool _isNoOfEntriesValid;
+        private bool _isNoOfSearchesValid;
         private bool _isSimulating;
         private Visibility _progressBarVisibility;
         private double _progressBarValue;
@@ -357,6 +359,5 @@ namespace SearchComparisonNet5.GUI.ViewModels
         private double _linearAvgElapsedTime;
         private double _binaryAvgNoOfIterations;
         private double _binaryAvgElapsedTime;
-        private bool _isInputValid;
     }
 }
