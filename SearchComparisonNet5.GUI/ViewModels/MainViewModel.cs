@@ -1,4 +1,6 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.Toolkit.Mvvm.Input;
 using SearchComparisonNet5.Kernel.Interfaces;
 using SearchComparisonNet5.Kernel.Models;
 using SearchComparisonNet5.Kernel.Properties;
@@ -20,6 +22,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
             SimulateCommand = new RelayCommand(Simulate, CanSimulate);
             CancelCommand = new RelayCommand(Cancel, CanCancel);
 
+            InputValidation = new InputValidation { CascadeMode = CascadeMode.Stop };
             NoOfEntries = (int)5e5;
             NoOfSearches = (int)1e3;
 
@@ -31,6 +34,8 @@ namespace SearchComparisonNet5.GUI.ViewModels
         public RelayCommand SimulateCommand { get; set; }
 
         public RelayCommand CancelCommand { get; set; }
+
+        public InputValidation InputValidation { get; set; }
 
         public ISearchItem SearchItem { get; set; }
 
@@ -67,12 +72,27 @@ namespace SearchComparisonNet5.GUI.ViewModels
         {
             get => _noOfEntries;
             set => SetProperty(ref _noOfEntries, value);
+            //set
+            //{
+            //    var isSet = SetProperty(ref _noOfEntries, value);
+            //    if (!isSet) return;
+
+            //    ValidationResult = InputValidation.Validate(this);
+            //    IsInputValid = ValidationResult.IsValid;
+            //    SimulateCommand.NotifyCanExecuteChanged();
+            //}
         }
 
         public int NoOfSearches
         {
             get => _noOfSearches;
-            set => SetProperty(ref _noOfSearches, value);
+            set
+            {
+                SetProperty(ref _noOfSearches, value);
+                ValidationResult = InputValidation.Validate(this);
+                IsInputValid = ValidationResult.IsValid;
+                SimulateCommand.NotifyCanExecuteChanged();
+            }
         }
 
         public int TargetValue
@@ -169,9 +189,9 @@ namespace SearchComparisonNet5.GUI.ViewModels
             }
         }
 
-        private bool CanSimulate() => !IsSimulating && IsInputValid();
+        private bool CanSimulate() => !IsSimulating && IsInputValid;
 
-        private bool CanCancel() => !IsSimulating && IsInputValid();
+        private bool CanCancel() => IsSimulating;
 
         private void Simulate()
         {
@@ -304,11 +324,21 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 : sb.Append(BinarySearch[toIndex] + ", ");
         }
 
-        private bool IsInputValid() => !HasErrors;
+        private bool IsInputValid
+        {
+            get => _isInputValid;
+            set
+            {
+                SetProperty(ref _isInputValid, value);
+                SimulateCommand.NotifyCanExecuteChanged();
+            }
+        }
 
         private LinearSearch LinearSearch { get; set; }
 
         private BinarySearch BinarySearch { get; set; }
+
+        public ValidationResult ValidationResult { get; set; }
 
         /***************************************** Private Fields ******************************************/
         private static readonly long MinProductValue = (long)1e5;
@@ -327,5 +357,6 @@ namespace SearchComparisonNet5.GUI.ViewModels
         private double _linearAvgElapsedTime;
         private double _binaryAvgNoOfIterations;
         private double _binaryAvgElapsedTime;
+        private bool _isInputValid;
     }
 }
