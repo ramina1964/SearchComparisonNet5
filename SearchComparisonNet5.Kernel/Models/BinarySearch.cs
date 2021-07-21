@@ -1,0 +1,50 @@
+﻿using SearchComparisonNet5.Kernel.Interfaces;
+
+namespace SearchComparisonNet5.Kernel.Models
+{
+    public sealed class BinarySearch : BaseSearch
+    {
+        public BinarySearch(ISearchItem searchItem, int noOfEntries)
+            : base(searchItem, noOfEntries)
+        { }
+
+        public override ISearchItem FindItem(int value)
+        { return FindItemWithBinarySearch(value); }
+
+        private ISearchItem FindItemWithBinarySearch(int value)
+        {
+            const int noOfIterations = 0;
+            return FindItemWithBinarySearch(0, NoOfEntries - 1, value, noOfIterations);
+        }
+
+        private ISearchItem FindItemWithBinarySearch(int low, int high, int value, int noOfIterations)
+        {
+            noOfIterations++;
+
+            if (low > high)
+            {
+                return new SearchItem()
+                {
+                    TargetIndex = null,
+                    TargetValue = value,
+                    NoOfIterations = noOfIterations
+                };
+            }
+
+            var mid = (low + high) / 2;
+            if (Data[mid] == value)
+            {
+                return new SearchItem()
+                {
+                    TargetIndex = mid,
+                    TargetValue = value,
+                    NoOfIterations = noOfIterations
+                };
+            }
+
+            return Data[mid] > value
+                ? FindItemWithBinarySearch(low, mid - 1, value, noOfIterations)
+                : FindItemWithBinarySearch(mid + 1, high, value, noOfIterations);
+        }
+    }
+}
