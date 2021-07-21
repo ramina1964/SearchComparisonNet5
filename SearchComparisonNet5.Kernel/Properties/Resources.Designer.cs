@@ -59,59 +59,5 @@ namespace SearchComparisonNet5.Kernel.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; must be a valid integer..
-        /// </summary>
-        public static string InvalidIntegerError {
-            get {
-                return ResourceManager.GetString("InvalidIntegerError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &quot;No of entries must be an integer in the interval [{0}, {1}].&quot;.
-        /// </summary>
-        public static string NoOfEntriesTooLargeError {
-            get {
-                return ResourceManager.GetString("NoOfEntriesTooLargeError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &quot;No of entries must be an integer in the interval [{0}, {1}].&quot;.
-        /// </summary>
-        public static string NoOfEntriesTooSmallError {
-            get {
-                return ResourceManager.GetString("NoOfEntriesTooSmallError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &quot;No of searches must be an integer in the interval [{0}, {1}].&quot;.
-        /// </summary>
-        public static string NoOfSearchesTooLargeError {
-            get {
-                return ResourceManager.GetString("NoOfSearchesTooLargeError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &quot;No of searches must be an integer in the interval [{0}, {1}].&quot;.
-        /// </summary>
-        public static string NoOfSearchesTooSmallError {
-            get {
-                return ResourceManager.GetString("NoOfSearchesTooSmallError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; can not be null, empty or exclusively contain white space..
-        /// </summary>
-        public static string ValueNullOrWhiteSpaceError {
-            get {
-                return ResourceManager.GetString("ValueNullOrWhiteSpaceError", resourceCulture);
-            }
-        }
     }
 }
