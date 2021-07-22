@@ -203,12 +203,6 @@ namespace SearchComparisonNet5.GUI.ViewModels
             };
 
             DataGenerator = new DataGenerator(dataParams);
-            SearchItem = new SearchItem
-            {
-                NoOfIterations = 0,
-                TargetIndex = null,
-                TargetValue = -1
-            };
             LinearSearch = new LinearSearch(SearchItem, DataGenerator);
             BinarySearch = new BinarySearch(SearchItem, DataGenerator);
 

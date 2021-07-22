@@ -1,5 +1,4 @@
-﻿
-namespace SearchComparisonNet5.Kernel.Models
+﻿namespace SearchComparisonNet5.Kernel.Models
 {
     public static class ProblemConstants
     {
