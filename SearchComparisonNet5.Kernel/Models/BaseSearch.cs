@@ -6,9 +6,8 @@ namespace SearchComparisonNet5.Kernel.Models
 {
     public abstract class BaseSearch
     {
-        protected BaseSearch(ISearchItem searchItem, IDataGenerator dataGen)
+        protected BaseSearch(IDataGenerator dataGen)
         {
-            SearchItem = searchItem;
             NoOfEntries = dataGen.NoOfEntries;
             MinValue = dataGen.MinValue;
             MaxValue = dataGen.MaxValue;

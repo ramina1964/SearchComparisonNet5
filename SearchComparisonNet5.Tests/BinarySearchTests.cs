@@ -16,7 +16,7 @@ namespace SearchComparisonNet5.Tests
             var expectedIndex = index;
 
             // Act
-            var sut = new BinarySearch(SearchItem, DataGenerator);
+            var sut = new BinarySearch(DataGenerator);
             var value = sut[index];
             var actualIndex = sut.FindItem(value).TargetIndex;
 

@@ -16,13 +16,7 @@ namespace SearchComparisonNet5.Tests
             var expectedIndex = index;
 
             // Act
-            //SearchItem = new SearchItem
-            //{
-            //    NoOfIterations = 0,
-            //    TargetIndex = null,
-            //};
-
-            var sut = new LinearSearch(SearchItem, DataGenerator);
+            var sut = new LinearSearch(DataGenerator);
             var value = sut[index];
             var actualIndex = sut.FindItem(value).TargetIndex;
 

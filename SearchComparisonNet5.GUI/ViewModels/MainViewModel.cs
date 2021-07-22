@@ -204,8 +204,8 @@ namespace SearchComparisonNet5.GUI.ViewModels
             };
 
             DataGenerator = new DataGenerator(dataParams);
-            LinearSearch = new LinearSearch(SearchItem, DataGenerator);
-            BinarySearch = new BinarySearch(SearchItem, DataGenerator);
+            LinearSearch = new LinearSearch(DataGenerator);
+            BinarySearch = new BinarySearch(DataGenerator);
 
             LinearAvgNoOfIterations = 0;
             LinearAvgElapsedTime = 0;

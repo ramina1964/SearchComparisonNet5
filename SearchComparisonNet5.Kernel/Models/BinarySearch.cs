@@ -4,7 +4,7 @@ namespace SearchComparisonNet5.Kernel.Models
 {
     public sealed class BinarySearch : BaseSearch
     {
-        public BinarySearch(ISearchItem searchItem, IDataGenerator dataGen) : base(searchItem, dataGen)
+        public BinarySearch(IDataGenerator dataGen) : base(dataGen)
         { }
 
         public override ISearchItem FindItem(int value)
