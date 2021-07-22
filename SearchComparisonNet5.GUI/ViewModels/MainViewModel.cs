@@ -15,10 +15,8 @@ namespace SearchComparisonNet5.GUI.ViewModels
 {
     public class MainViewModel : ExtendedViewModel
     {
-        //public MainViewModel(ISearchItem searchItem)
         public MainViewModel()
         {
-            //SearchItem = searchItem;
             SimulateCommand = new RelayCommand(Simulate, CanSimulate);
             CancelCommand = new RelayCommand(Cancel, CanCancel);
 
@@ -45,6 +43,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
             set
             {
                 SetProperty(ref _isSimulating, value);
+                _ = Application.Current.Dispatcher.BeginInvoke(() => SimulateCommand.NotifyCanExecuteChanged());
                 _ = Application.Current.Dispatcher.BeginInvoke(() => CancelCommand.NotifyCanExecuteChanged());
             }
         }
@@ -178,7 +177,6 @@ namespace SearchComparisonNet5.GUI.ViewModels
         }
 
         /***************************************** Private Methods *****************************************/
-        //private bool CanSimulate() => !IsSimulating && IsNoOfEntriesValid && IsNoOfSearchesValid;
         private bool CanSimulate() => !IsSimulating && IsNoOfEntriesValid && IsNoOfSearchesValid;
 
         private bool CanCancel() => IsSimulating;
