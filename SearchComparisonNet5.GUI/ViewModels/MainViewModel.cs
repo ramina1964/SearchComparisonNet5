@@ -15,9 +15,10 @@ namespace SearchComparisonNet5.GUI.ViewModels
 {
     public class MainViewModel : ExtendedViewModel
     {
-        public MainViewModel(ISearchItem searchItem)
+        //public MainViewModel(ISearchItem searchItem)
+        public MainViewModel()
         {
-            SearchItem = searchItem;
+            //SearchItem = searchItem;
             SimulateCommand = new RelayCommand(Simulate, CanSimulate);
             CancelCommand = new RelayCommand(Cancel, CanCancel);
 

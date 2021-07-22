@@ -1,6 +1,4 @@
-﻿using SearchComparisonNet5.GUI.ViewModels;
-using SearchComparisonNet5.Kernel.Models;
-using System.Windows;
+﻿using System.Windows;
 
 namespace SearchComparisonNet5.GUI
 {
@@ -9,10 +7,6 @@ namespace SearchComparisonNet5.GUI
         public MainView()
         {
             InitializeComponent();
-
-            var searchItem = new SearchItem();
-            var vm = new MainViewModel(searchItem);
-            DataContext = vm;
         }
     }
 }

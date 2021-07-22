@@ -16,6 +16,10 @@
         <converters:NegativeConverter x:Key="NegativeConverter" />
     </Window.Resources>
 
+    <Window.DataContext>
+        <viewmodels:MainViewModel />
+    </Window.DataContext>
+
     <Page>
         <Viewbox>
             <Grid Margin="5">
