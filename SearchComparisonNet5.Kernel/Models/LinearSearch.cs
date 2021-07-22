@@ -4,7 +4,7 @@ namespace SearchComparisonNet5.Kernel.Models
 {
     public sealed class LinearSearch : BaseSearch
     {
-        public LinearSearch(ISearchItem searchItem, int noOfEntries) : base(searchItem, noOfEntries)
+        public LinearSearch(ISearchItem searchItem, IDataGenerator dataGen) : base(searchItem, dataGen)
         { }
 
         public override ISearchItem FindItem(int value)
@@ -28,10 +28,12 @@ namespace SearchComparisonNet5.Kernel.Models
                 break;
             }
 
-            SearchItem.TargetIndex = targetIndex;
-            SearchItem.TargetValue = value;
-            SearchItem.NoOfIterations = noOfIterations;
-            return SearchItem;
+            return new SearchItem
+            {
+                TargetIndex = targetIndex,
+                TargetValue = value,
+                NoOfIterations = noOfIterations
+            };
         }
     }
 }

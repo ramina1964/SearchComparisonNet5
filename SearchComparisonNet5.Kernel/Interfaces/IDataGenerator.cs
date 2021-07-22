@@ -13,6 +13,8 @@ namespace SearchComparisonNet5.Kernel.Interfaces
 
         int NextRandomNo();
 
+        public ObservableCollection<int> Data { get; }
+
         ObservableCollection<int> GenerateData();
     }
 }

@@ -1,32 +1,30 @@
 ﻿using SearchComparisonNet5.Kernel.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace SearchComparisonNet5.Kernel.Models
 {
     public abstract class BaseSearch
     {
-        protected BaseSearch(ISearchItem searchItem, int noOfEntries)
+        protected BaseSearch(ISearchItem searchItem, IDataGenerator dataGen)
         {
             SearchItem = searchItem;
-            NoOfEntries = noOfEntries;
-            StartValue = 0;
-            EndValue = 5 * NoOfEntries - 1;
-
-            IndexOutOfRangeError = $"Index must be an integer in the interval [{0}, {NoOfEntries - 1}].";
-            Random = new Random();
+            NoOfEntries = dataGen.NoOfEntries;
+            MinValue = dataGen.MinValue;
+            MaxValue = dataGen.MaxValue;
+            Data = dataGen.Data;
+            NextRandomNo = dataGen.NextRandomNo();
         }
 
         public ISearchItem SearchItem { get; }
 
-        public int NoOfEntries
-        { get; }
+        public int NoOfEntries { get; }
 
-        public int EndValue { get; }
+        public int MaxValue { get; }
 
-        public int StartValue { get; }
+        public int MinValue { get; }
+        
+        public int NextRandomNo { get; }
 
         public int this[int index]
         {
@@ -39,26 +37,12 @@ namespace SearchComparisonNet5.Kernel.Models
                 Data[index] = value;
             }
         }
-        public static Random Random;
+
+        public string IndexOutOfRangeError => $"Index must be an integer in the interval [{0}, {NoOfEntries - 1}].";
 
         protected ObservableCollection<int> Data;
 
         public abstract ISearchItem FindItem(int value);
-
-        public static string IndexOutOfRangeError;
-
-        public void InitializeData()
-        {
-            var data = new HashSet<int>();
-            var size = NoOfEntries;
-
-            while (data.Count < size)
-            { data.Add(Random.Next(StartValue, EndValue)); }
-
-            var result = data.ToList();
-            result.Sort();
-            Data = new ObservableCollection<int>(result);
-        }
     }
 
 }

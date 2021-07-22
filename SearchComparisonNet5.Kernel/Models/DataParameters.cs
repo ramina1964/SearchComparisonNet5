@@ -4,8 +4,8 @@
     {
         public int NoOfEntries { get; set; }
 
-        public int MinValue { get; set; }
+        public int MinEntryValue { get; set; }
 
-        public int MaxValue { get; set; }
+        public int MaxEntryValue { get; set; }
     }
 }

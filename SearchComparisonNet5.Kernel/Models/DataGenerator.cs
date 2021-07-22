@@ -8,13 +8,16 @@ namespace SearchComparisonNet5.Kernel.Models
 {
     public class DataGenerator : IDataGenerator
     {
-        public DataGenerator(DataParameters dataParameters)
+        public DataGenerator(DataParameters dataParams)
         {
             Random = new Random();
-            NoOfEntries = dataParameters.NoOfEntries;
-            MinValue = dataParameters.MinValue;
-            MaxValue = dataParameters.MaxValue;
+            NoOfEntries = dataParams.NoOfEntries;
+            MinValue = dataParams.MinEntryValue;
+            MaxValue = dataParams.MaxEntryValue;
+            Data = GenerateData();
         }
+
+        public ObservableCollection<int> Data { get; }
 
         public Random Random { get; }
 

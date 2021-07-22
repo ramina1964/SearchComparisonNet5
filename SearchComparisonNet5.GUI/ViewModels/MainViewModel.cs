@@ -22,8 +22,8 @@ namespace SearchComparisonNet5.GUI.ViewModels
             CancelCommand = new RelayCommand(Cancel, CanCancel);
 
             InputValidation = new InputValidation() { CascadeMode = CascadeMode.Stop };
-            NoOfEntriesText = "500000";
-            NoOfSearchesText = "1000";
+            NoOfEntriesText = ProblemConstants.InitialNoOfEntries.ToString();
+            NoOfSearchesText = ProblemConstants.InitialNoOfSearches.ToString();
 
             IsSimulating = false;
             ProgressBarVisibility = Visibility.Hidden;
@@ -114,7 +114,10 @@ namespace SearchComparisonNet5.GUI.ViewModels
         public int NoOfEntries
         {
             get => _noOfEntries;
-            set => SetProperty(ref _noOfEntries, value);
+            set
+            {
+                SetProperty(ref _noOfEntries, value);
+            }
         }
 
         public int NoOfSearches
@@ -192,8 +195,22 @@ namespace SearchComparisonNet5.GUI.ViewModels
             ProgressBarVisibility = Visibility.Visible;
 
             ProgressBarLabel = string.Empty;
-            LinearSearch = new LinearSearch(SearchItem, NoOfEntries);
-            BinarySearch = new BinarySearch(SearchItem, NoOfEntries);
+            var dataParams = new DataParameters
+            {
+                MinEntryValue = ProblemConstants.MinEntryValue,
+                MaxEntryValue = ProblemConstants.MaxEntryValue,
+                NoOfEntries = ProblemConstants.InitialNoOfEntries,
+            };
+
+            DataGenerator = new DataGenerator(dataParams);
+            SearchItem = new SearchItem
+            {
+                NoOfIterations = 0,
+                TargetIndex = null,
+                TargetValue = -1
+            };
+            LinearSearch = new LinearSearch(SearchItem, DataGenerator);
+            BinarySearch = new BinarySearch(SearchItem, DataGenerator);
 
             LinearAvgNoOfIterations = 0;
             LinearAvgElapsedTime = 0;
@@ -210,12 +227,10 @@ namespace SearchComparisonNet5.GUI.ViewModels
         private async void Simulate(params BaseSearch[] searchTypes)
         {
             IsSimulating = true;
-            searchTypes[0].InitializeData();
-            searchTypes[1].InitializeData();
 
             Entries = GetEntries();
-            LinearSearchResults = await SimulateLinearSearchAsync(searchTypes[0]).ConfigureAwait(true);
-            BinarySearchResults = await SimulateBinarySearchAsync(searchTypes[1]).ConfigureAwait(true);
+            LinearSearchResults = await SimulateLinearSearchAsync(searchTypes[0]);
+            BinarySearchResults = await SimulateBinarySearchAsync(searchTypes[1]);
 
             LinearAvgNoOfIterations = LinearSearchResults.AvgNoOfIterations;
             LinearAvgElapsedTime = LinearSearchResults.AvgElapsedTime;
@@ -233,7 +248,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 var stopwatch = Stopwatch.StartNew();
                 for (var j = 0; j < NoOfSearches; j++)
                 {
-                    var value = BaseSearch.Random.Next(linearSearch.StartValue, linearSearch.EndValue);
+                    var value = DataGenerator.NextRandomNo();
                     var searchItem = linearSearch.FindItem(value);
                     totalNoOfIterations += searchItem.NoOfIterations;
                     ProgressBarValue = (j + 1) * 100.0 / NoOfSearches;
@@ -256,7 +271,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 var stopwatch = Stopwatch.StartNew();
                 for (var j = 0; j < NoOfSearches; j++)
                 {
-                    var value = BaseSearch.Random.Next(binarySearch.StartValue, binarySearch.EndValue);
+                    var value = DataGenerator.NextRandomNo();
                     var searchItem = binarySearch.FindItem(value);
                     totalNoOfIterations += searchItem.NoOfIterations;
                     ProgressBarValue = 100 * (j + 1) / NoOfSearches;
@@ -309,6 +324,8 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 ? sb.Append(BinarySearch[toIndex])
                 : sb.Append(BinarySearch[toIndex] + ", ");
         }
+
+        public DataGenerator DataGenerator { get; set; }
 
         private LinearSearch LinearSearch { get; set; }
 
