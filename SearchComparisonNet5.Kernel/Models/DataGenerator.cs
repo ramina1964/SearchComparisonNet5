@@ -33,9 +33,8 @@ namespace SearchComparisonNet5.Kernel.Models
         public ObservableCollection<int> GenerateData()
         {
             var data = new HashSet<int>();
-            var size = NoOfEntries;
 
-            while (data.Count < size)
+            while (data.Count < NoOfEntries)
             { data.Add(Random.Next(MinValue, MaxValue)); }
 
             var result = data.ToList();
