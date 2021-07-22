@@ -32,21 +32,22 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <GroupBox Style ="{StaticResource GroupBoxStyle}" Header="Input" Grid.Row="0" Grid.Column="0" >
+                <GroupBox Style ="{StaticResource GroupBoxStyle}" Header="Input" Grid.Row="0" Grid.Column="0">
 
-                    <StackPanel Orientation="Vertical" Margin="0, 5, 0, 0" >
-                        <DockPanel >
-                            <Label Style="{StaticResource LabelStyle}" Content="No. of Entries" />
-                            <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="35"
+                    <!-- Input Panel -->
+                    <StackPanel Orientation="Vertical" Margin="0, 5, 0, 0">
+                        <DockPanel>
+                            <Label Style="{StaticResource LabelStyle}" Content="No. of Entries"/>
+                            <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="55"
                                      Text="{Binding NoOfEntriesText, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                             ValidatesOnNotifyDataErrors=True, Converter={StaticResource NumStringConverter}}"
                                      IsEnabled="{Binding IsSimulating, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                                                ValidatesOnNotifyDataErrors=True, Converter={StaticResource NegativeConverter}}" />
+                                                ValidatesOnNotifyDataErrors=True, Converter={StaticResource NegativeConverter}}"/>
                         </DockPanel>
 
                         <DockPanel >
                             <Label Style="{StaticResource LabelStyle}" Content="No. of Searches" />
-                            <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="35"
+                            <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="55"
                                      Text="{Binding NoOfSearchesText, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True,
                                             Converter={StaticResource NumStringConverter}}"
                                      IsEnabled="{Binding IsSimulating, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
@@ -135,7 +136,7 @@
                     <StackPanel Orientation="Vertical" >
                         <DockPanel >
                             <Label Style="{StaticResource LabelStyle}" DockPanel.Dock ="Left" Content="Target Value" />
-                            <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="35"
+                            <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="55"
                                      Text="{Binding TargetValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True,
                                             Converter={StaticResource NumStringConverter}}"
                                      IsEnabled="{Binding IsSimulating, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
@@ -144,7 +145,7 @@
 
                         <DockPanel >
                             <Label Style="{StaticResource LabelStyle}" DockPanel.Dock ="Left" Content="Target Index" />
-                            <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="35"
+                            <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="55"
                                      Text="{Binding TargetIndex, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True,
                                             Converter={StaticResource NumStringConverter}}"
                                      IsEnabled="{Binding IsSimulating, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
