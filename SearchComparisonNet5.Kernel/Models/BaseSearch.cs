@@ -9,21 +9,10 @@ namespace SearchComparisonNet5.Kernel.Models
         protected BaseSearch(IDataGenerator dataGen)
         {
             NoOfEntries = dataGen.NoOfEntries;
-            MinValue = dataGen.MinValue;
-            MaxValue = dataGen.MaxValue;
             Data = dataGen.Data;
-            NextRandomNo = dataGen.NextRandomNo();
         }
 
-        public ISearchItem SearchItem { get; }
-
         public int NoOfEntries { get; }
-
-        public int MaxValue { get; }
-
-        public int MinValue { get; }
-        
-        public int NextRandomNo { get; }
 
         public int this[int index]
         {
@@ -43,5 +32,4 @@ namespace SearchComparisonNet5.Kernel.Models
 
         public abstract ISearchItem FindItem(int value);
     }
-
 }
