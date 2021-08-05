@@ -1,4 +1,3 @@
-using System;
 using System.Collections.ObjectModel;
 
 namespace SearchComparisonNet5.Kernel.Interfaces

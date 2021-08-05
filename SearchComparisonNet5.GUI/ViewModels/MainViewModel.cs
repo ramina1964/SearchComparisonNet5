@@ -6,18 +6,19 @@ using SearchComparisonNet5.Kernel.Models;
 using System;
 using System.Diagnostics;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace SearchComparisonNet5.GUI.ViewModels
 {
-    public class MainViewModel : ExtendedViewModel
+    public class MainViewModel : ViewModelBase
     {
-        public MainViewModel()
+        public MainViewModel(LinearSearch linearSearch, BinarySearch binarySearch)
         {
             SimulateCommand = new RelayCommand(Simulate, CanSimulate);
             CancelCommand = new RelayCommand(Cancel, CanCancel);
+            LinearSearch = linearSearch;
+            BinarySearch = binarySearch;
 
             InputValidation = new InputValidation() { CascadeMode = CascadeMode.Stop };
             NoOfEntriesText = ProblemConstants.InitialNoOfEntries.ToString();
@@ -41,17 +42,14 @@ namespace SearchComparisonNet5.GUI.ViewModels
             get => _isSimulating;
             set
             {
-                var isSet = SetProperty(ref _isSimulating, value);
-
                 if (SetProperty(ref _isSimulating, value))
                 {
-                    SimulateCommand.NotifyCanExecuteChanged();
-                    CancelCommand.NotifyCanExecuteChanged();
+                    UpdateButtonFunctionality();
                 }
             }
         }
 
-        private void UpdateRelayCommands()
+        private void UpdateButtonFunctionality()
         {
             SimulateCommand.NotifyCanExecuteChanged();
             CancelCommand.NotifyCanExecuteChanged();
@@ -85,17 +83,17 @@ namespace SearchComparisonNet5.GUI.ViewModels
             get => _noOfEntriesText;
             set
             {
-                var isSet = SetProperty(ref _noOfEntriesText, value);
-                if (!isSet) return;
-
-                ValidationResult = InputValidation.Validate(this, option => option.IncludeRuleSets("RuleForNoOfEntries"));
-                IsNoOfEntriesValid = ValidationResult.IsValid;
-                SimulateCommand.NotifyCanExecuteChanged();
-
-                if (IsNoOfEntriesValid)
+                if (SetProperty(ref _noOfEntriesText, value))
                 {
-                    _ = SetProperty(ref _noOfEntries, int.Parse(value));
-                    OnPropertyChanged(nameof(NoOfEntries));
+                    ValidationResult = InputValidation.Validate(this);
+                    IsInputValid = ValidationResult.IsValid;
+                    UpdateButtonFunctionality();
+
+                    if (IsInputValid)
+                    {
+                        _ = SetProperty(ref _noOfEntries, int.Parse(value));
+                        OnPropertyChanged(nameof(NoOfEntries));
+                    }
                 }
             }
         }
@@ -108,11 +106,11 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 var isSet = SetProperty(ref _noOfSearchesText, value);
                 if (!isSet) return;
 
-                ValidationResult = InputValidation.Validate(this, options => options.IncludeRuleSets("RuleForNoOfSearches"));
-                IsNoOfSearchesValid = ValidationResult.IsValid;
-                SimulateCommand.NotifyCanExecuteChanged();
+                ValidationResult = InputValidation.Validate(this);
+                IsInputValid = ValidationResult.IsValid;
+                UpdateButtonFunctionality();
 
-                if (IsNoOfSearchesValid)
+                if (IsInputValid)
                 {
                     _ = SetProperty(ref _noOfSearches, int.Parse(value));
                     OnPropertyChanged(nameof(NoOfSearches));
@@ -123,10 +121,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
         public int NoOfEntries
         {
             get => _noOfEntries;
-            set
-            {
-                SetProperty(ref _noOfEntries, value);
-            }
+            set => SetProperty(ref _noOfEntries, value);
         }
 
         public int NoOfSearches
@@ -186,53 +181,15 @@ namespace SearchComparisonNet5.GUI.ViewModels
         }
 
         /***************************************** Private Methods *****************************************/
-        private bool CanSimulate() => !IsSimulating && IsNoOfEntriesValid && IsNoOfSearchesValid;
+        private bool CanSimulate() => !IsSimulating && IsInputValid;
 
         private bool CanCancel() => IsSimulating;
 
-        private void Simulate()
+        private async void Simulate()
         {
             IsSimulating = true;
-            var searches = Initialize();
-            new Thread(() => Simulate(searches)).Start();
-            IsSimulating = false;
-        }
-
-        private BaseSearch[] Initialize()
-        {
-            ProgressBarVisibility = Visibility.Visible;
-
-            ProgressBarLabel = string.Empty;
-            var dataParams = new DataParameters
-            {
-                MinEntryValue = ProblemConstants.MinEntryValue,
-                MaxEntryValue = ProblemConstants.MaxEntryValue,
-                NoOfEntries = ProblemConstants.InitialNoOfEntries,
-            };
-
-            DataGenerator = new DataGenerator(dataParams);
-            LinearSearch = new LinearSearch(DataGenerator);
-            BinarySearch = new BinarySearch(DataGenerator);
-
-            LinearAvgNoOfIterations = 0;
-            LinearAvgElapsedTime = 0;
-            BinaryAvgNoOfIterations = 0;
-            BinaryAvgElapsedTime = 0;
-
-            return new BaseSearch[] { LinearSearch, BinarySearch };
-        }
-
-        private void Cancel()
-        {
-        }
-
-        private async void Simulate(params BaseSearch[] searchTypes)
-        {
-            IsSimulating = true;
-
-            Entries = GetEntries();
-            LinearSearchResults = await SimulateLinearSearchAsync(searchTypes[0]);
-            BinarySearchResults = await SimulateBinarySearchAsync(searchTypes[1]);
+            LinearSearchResults = await SimulateLinearSearchAsync();
+            BinarySearchResults = await SimulateBinarySearchAsync();
 
             LinearAvgNoOfIterations = LinearSearchResults.AvgNoOfIterations;
             LinearAvgElapsedTime = LinearSearchResults.AvgElapsedTime;
@@ -242,16 +199,19 @@ namespace SearchComparisonNet5.GUI.ViewModels
             IsSimulating = false;
         }
 
-        private Task<ISimulationResults> SimulateLinearSearchAsync(BaseSearch linearSearch)
+        private void Cancel() { }
+
+        private Task<ISimulationResults> SimulateLinearSearchAsync()
         {
             return Task.Factory.StartNew(() =>
             {
+                ProgressBarVisibility = Visibility.Visible;
                 var totalNoOfIterations = 0.0;
                 var stopwatch = Stopwatch.StartNew();
                 for (var j = 0; j < NoOfSearches; j++)
                 {
-                    var value = DataGenerator.NextRandomNo();
-                    var searchItem = linearSearch.FindItem(value);
+                    var value = LinearSearch.NextRandomNo();
+                    var searchItem = LinearSearch.FindItem(value);
                     totalNoOfIterations += searchItem.NoOfIterations;
                     ProgressBarValue = (j + 1) * 100.0 / NoOfSearches;
                 }
@@ -265,7 +225,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
             });
         }
 
-        private Task<ISimulationResults> SimulateBinarySearchAsync(BaseSearch binarySearch)
+        private Task<ISimulationResults> SimulateBinarySearchAsync()
         {
             return Task.Factory.StartNew(() =>
             {
@@ -273,8 +233,8 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 var stopwatch = Stopwatch.StartNew();
                 for (var j = 0; j < NoOfSearches; j++)
                 {
-                    var value = DataGenerator.NextRandomNo();
-                    var searchItem = binarySearch.FindItem(value);
+                    var value = LinearSearch.NextRandomNo();
+                    var searchItem = BinarySearch.FindItem(value);
                     totalNoOfIterations += searchItem.NoOfIterations;
                     ProgressBarValue = 100 * (j + 1) / NoOfSearches;
                 }
@@ -327,33 +287,21 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 : sb.Append(BinarySearch[toIndex] + ", ");
         }
 
-        public DataGenerator DataGenerator { get; set; }
-
         private LinearSearch LinearSearch { get; set; }
 
         private BinarySearch BinarySearch { get; set; }
 
         public ValidationResult ValidationResult { get; set; }
 
-        private bool IsNoOfEntriesValid
+        private bool IsInputValid
         {
-            get => _isNoOfEntriesValid;
+            get => _isInputValid;
             set
             {
-                var _isSet = SetProperty(ref _isNoOfEntriesValid, value);
-                if (_isSet)
-                { SimulateCommand.NotifyCanExecuteChanged(); }
-            }
-        }
-
-        public bool IsNoOfSearchesValid
-        {
-            get => _isNoOfSearchesValid;
-            set
-            {
-                var _isSet = SetProperty(ref _isNoOfSearchesValid, value);
-                if (_isSet)
-                { SimulateCommand.NotifyCanExecuteChanged(); }
+                if (SetProperty(ref _isInputValid, value))
+                {
+                    UpdateButtonFunctionality();
+                }
             }
         }
 
@@ -368,8 +316,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
         private string _noOfSearchesText;
         private int _noOfEntries;
         private int _noOfSearches;
-        private bool _isNoOfEntriesValid;
-        private bool _isNoOfSearchesValid;
+        private bool _isInputValid;
         private bool _isSimulating;
         private Visibility _progressBarVisibility;
         private double _progressBarValue;

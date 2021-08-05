@@ -11,9 +11,9 @@ namespace SearchComparisonNet5.Kernel.Models
         public DataGenerator(DataParameters dataParams)
         {
             Random = new Random();
-            NoOfEntries = dataParams.NoOfEntries;
-            MinValue = dataParams.MinEntryValue;
-            MaxValue = dataParams.MaxEntryValue;
+            NoOfEntries = DataParameters.NoOfEntries;
+            MinValue = DataParameters.MinEntryValue;
+            MaxValue = DataParameters.MaxEntryValue;
             Data = GenerateData();
         }
 

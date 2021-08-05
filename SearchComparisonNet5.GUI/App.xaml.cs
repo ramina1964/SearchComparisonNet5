@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SearchComparisonNet5.GUI.ViewModels;
 using SearchComparisonNet5.GUI.Views;
 using SearchComparisonNet5.Kernel.Interfaces;
 using SearchComparisonNet5.Kernel.Models;
 using System;
 using System.Windows;
-
 
 namespace SearchComparisonNet5.GUI
 {
@@ -13,30 +13,32 @@ namespace SearchComparisonNet5.GUI
         public App()
         {
             var services = new ServiceCollection();
-            //ConfigureServices(services);
-            //_serviceProvider = services.BuildServiceProvider();
+            ConfigureServices(services);
+            _serviceProvider = services.BuildServiceProvider();
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
-            throw new NotImplementedException();
-
-            //services.AddSingleton<IDataGenerator, DataGenerator>();
-            //services.AddSingleton<IDataGenerator, DataGenerator>();
-            //services.AddSingleton<IDataGenerator, DataGenerator>();
-            //services.AddSingleton<IDataGenerator, DataGenerator>();
-            //services.AddSingleton<IDataGenerator, DataGenerator>();
-
-
+            _ = services.AddSingleton<DataParameters>();
+            _ = services.AddSingleton<IDataGenerator, DataGenerator>();
+            _ = services.AddSingleton<LinearSearch>();
+            _ = services.AddSingleton<BinarySearch>();
+            _ = services.AddSingleton<MainViewModel>();
+            _ = services.AddSingleton<MainView>();
         }
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
-            MainView mainView = new();
+            var mainView = _serviceProvider.GetService<MainView>();
             mainView.Show();
         }
 
         private readonly IServiceProvider _serviceProvider;
 
+        public IServiceCollection LinearSearch { get; set; }
+
+        public IServiceCollection BinarySearch { get; set; }
+
+        public IServiceCollection DataGenerator { get; set; }
     }
 }

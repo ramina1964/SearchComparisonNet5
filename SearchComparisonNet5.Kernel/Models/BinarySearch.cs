@@ -2,7 +2,7 @@
 
 namespace SearchComparisonNet5.Kernel.Models
 {
-    public sealed class BinarySearch : BaseSearch
+    public sealed class BinarySearch : SearchBase
     {
         public BinarySearch(IDataGenerator dataGen) : base(dataGen)
         { }

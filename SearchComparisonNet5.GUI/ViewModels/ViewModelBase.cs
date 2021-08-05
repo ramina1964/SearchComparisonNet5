@@ -7,7 +7,7 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace SearchComparisonNet5.GUI.ViewModels
 {
-    public class ExtendedViewModel : ObservableObject, INotifyDataErrorInfo
+    public class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     {
         #region INotifyDataErrorInfo
         public IEnumerable GetErrors(string propertyName)

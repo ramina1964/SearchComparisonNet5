@@ -4,15 +4,18 @@ using System.Collections.ObjectModel;
 
 namespace SearchComparisonNet5.Kernel.Models
 {
-    public abstract class BaseSearch
+    public abstract class SearchBase
     {
-        protected BaseSearch(IDataGenerator dataGen)
+        protected SearchBase(IDataGenerator dataGen)
         {
             NoOfEntries = dataGen.NoOfEntries;
+            NextRandomNo = dataGen.NextRandomNo;
             Data = dataGen.Data;
         }
 
         public int NoOfEntries { get; }
+
+        public Func<int> NextRandomNo { get; }
 
         public int this[int index]
         {

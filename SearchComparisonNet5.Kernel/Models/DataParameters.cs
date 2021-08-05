@@ -2,10 +2,10 @@
 {
     public class DataParameters
     {
-        public int NoOfEntries { get; set; }
+        public static int NoOfEntries => ProblemConstants.InitialNoOfEntries;
 
-        public int MinEntryValue { get; set; }
+        public static int MinEntryValue => ProblemConstants.MinEntryValue;
 
-        public int MaxEntryValue { get; set; }
+        public static int MaxEntryValue => ProblemConstants.MaxEntryValue;
     }
 }

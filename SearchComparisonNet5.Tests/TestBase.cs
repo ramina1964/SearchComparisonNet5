@@ -2,19 +2,19 @@
 
 namespace SearchComparisonNet5.Tests
 {
-    public class BaseTest
+    public class TestBase
     {
-        public BaseTest()
+        public TestBase()
         {
-            DataParams = new DataParameters()
-            {
-                MinEntryValue = ProblemConstants.MinEntryValue,
-                MaxEntryValue = ProblemConstants.MaxEntryValue,
-                NoOfEntries = ProblemConstants.InitialNoOfEntries,
-            };
-
+            DataParams = new DataParameters();
             DataGenerator = new DataGenerator(DataParams);
+            LinearSut = new LinearSearch(DataGenerator);
+            BinarySut = new BinarySearch(DataGenerator);
         }
+
+        public LinearSearch LinearSut { get; set; }
+
+        public BinarySearch BinarySut { get; set; }
 
         public DataParameters DataParams { get; }
 
