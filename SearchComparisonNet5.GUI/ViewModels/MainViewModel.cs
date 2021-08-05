@@ -82,22 +82,18 @@ namespace SearchComparisonNet5.GUI.ViewModels
             get => _noOfEntriesText;
             set
             {
-                if (SetProperty(ref _noOfEntriesText, value))
+                _ = SetProperty(ref _noOfEntriesText, value);
+                IsInputValid = InputValidation.Validate(this).IsValid;
+
+                if (!IsInputValid)
                 {
-                    IsInputValid = InputValidation.Validate(this).IsValid;
-
-                    if (!IsInputValid)
-                    {
-                        IsSimulating = false;
-                        return;
-                    }
-
-                    // Here is InputValid == true
-                    var noOfEntries = int.Parse(value);
-                    _ = SetProperty(ref _noOfEntries, noOfEntries);
-                    OnPropertyChanged(nameof(NoOfEntries));
-                    UpdateButtonFunctionality();
+                    IsSimulating = false;
+                    return;
                 }
+
+                // Here: IsInputValid == true;
+                NoOfEntries = int.Parse(value);
+                UpdateButtonFunctionality();
             }
         }
 
@@ -106,18 +102,18 @@ namespace SearchComparisonNet5.GUI.ViewModels
             get => _noOfSearchesText;
             set
             {
-                if (SetProperty(ref _noOfSearchesText, value))
-                {
-                    IsInputValid = InputValidation.Validate(this).IsValid;
-                    UpdateButtonFunctionality();
+                _ = SetProperty(ref _noOfSearchesText, value);
+                IsInputValid = InputValidation.Validate(this).IsValid;
 
-                    if (IsInputValid)
-                    {
-                        var noOfSearches = int.Parse(value);
-                        _ = SetProperty(ref _noOfSearches, noOfSearches);
-                        OnPropertyChanged(nameof(NoOfSearches));
-                    }
+                if (!IsInputValid)
+                {
+                    IsSimulating = false;
+                    return;
                 }
+
+                // Here: IsInputValid == true;
+                NoOfSearches = int.Parse(value);
+                UpdateButtonFunctionality();
             }
         }
 
