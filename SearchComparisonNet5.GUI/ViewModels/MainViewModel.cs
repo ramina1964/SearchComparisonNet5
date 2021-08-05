@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.Toolkit.Mvvm.Input;
 using SearchComparisonNet5.Kernel.Interfaces;
 using SearchComparisonNet5.Kernel.Models;
@@ -85,15 +84,19 @@ namespace SearchComparisonNet5.GUI.ViewModels
             {
                 if (SetProperty(ref _noOfEntriesText, value))
                 {
-                    ValidationResult = InputValidation.Validate(this);
-                    IsInputValid = ValidationResult.IsValid;
-                    UpdateButtonFunctionality();
+                    IsInputValid = InputValidation.Validate(this).IsValid;
 
-                    if (IsInputValid)
+                    if (!IsInputValid)
                     {
-                        _ = SetProperty(ref _noOfEntries, int.Parse(value));
-                        OnPropertyChanged(nameof(NoOfEntries));
+                        IsSimulating = false;
+                        return;
                     }
+
+                    // Here is InputValid == true
+                    var noOfEntries = int.Parse(value);
+                    _ = SetProperty(ref _noOfEntries, noOfEntries);
+                    OnPropertyChanged(nameof(NoOfEntries));
+                    UpdateButtonFunctionality();
                 }
             }
         }
@@ -103,17 +106,17 @@ namespace SearchComparisonNet5.GUI.ViewModels
             get => _noOfSearchesText;
             set
             {
-                var isSet = SetProperty(ref _noOfSearchesText, value);
-                if (!isSet) return;
-
-                ValidationResult = InputValidation.Validate(this);
-                IsInputValid = ValidationResult.IsValid;
-                UpdateButtonFunctionality();
-
-                if (IsInputValid)
+                if (SetProperty(ref _noOfSearchesText, value))
                 {
-                    _ = SetProperty(ref _noOfSearches, int.Parse(value));
-                    OnPropertyChanged(nameof(NoOfSearches));
+                    IsInputValid = InputValidation.Validate(this).IsValid;
+                    UpdateButtonFunctionality();
+
+                    if (IsInputValid)
+                    {
+                        var noOfSearches = int.Parse(value);
+                        _ = SetProperty(ref _noOfSearches, noOfSearches);
+                        OnPropertyChanged(nameof(NoOfSearches));
+                    }
                 }
             }
         }
@@ -290,8 +293,6 @@ namespace SearchComparisonNet5.GUI.ViewModels
         private SearchBase LinearSearch { get; set; }
 
         private SearchBase BinarySearch { get; set; }
-
-        public ValidationResult ValidationResult { get; set; }
 
         private bool IsInputValid
         {

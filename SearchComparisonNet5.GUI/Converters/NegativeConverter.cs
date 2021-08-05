@@ -10,9 +10,11 @@ namespace SearchComparisonNet5.GUI.Converters
     {
         public NegativeConverter() : base() { }
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => ReturnNegative(value);
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => ReturnNegative(value);
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => ReturnNegative(value);
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => ReturnNegative(value);
 
         private static object ReturnNegative(object value)
         {
@@ -32,7 +34,6 @@ namespace SearchComparisonNet5.GUI.Converters
             @switch[value.GetType()]();
             return result ?? throw new NotImplementedException();
         }
-
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {

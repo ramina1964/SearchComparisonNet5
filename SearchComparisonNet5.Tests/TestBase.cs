@@ -6,20 +6,18 @@ namespace SearchComparisonNet5.Tests
     {
         public TestBase()
         {
-            DataParams = new DataParameters();
-            DataGenerator = new DataGenerator(DataParams);
+            DataParameters = new DataParameters();
+            DataGenerator = new DataGenerator(DataParameters);
             LinearSut = new LinearSearch(DataGenerator);
             BinarySut = new BinarySearch(DataGenerator);
         }
+
+        public DataParameters DataParameters { get; set; }
 
         public SearchBase LinearSut { get; set; }
 
         public SearchBase BinarySut { get; set; }
 
-        public DataParameters DataParams { get; }
-
         public DataGenerator DataGenerator { get; }
-
-        public SearchItem SearchItem { get; set; }
     }
 }

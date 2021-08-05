@@ -31,8 +31,8 @@ namespace SearchComparisonNet5.Kernel.Models
 
         public string IndexOutOfRangeError => $"Index must be an integer in the interval [{0}, {NoOfEntries - 1}].";
 
-        protected ObservableCollection<int> Data;
-
         public abstract ISearchItem FindItem(int value);
+
+        protected ObservableCollection<int> Data;
     }
 }

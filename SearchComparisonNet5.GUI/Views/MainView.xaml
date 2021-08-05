@@ -42,7 +42,8 @@
                                      Text="{Binding NoOfEntriesText, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                             ValidatesOnNotifyDataErrors=True, Converter={StaticResource NumStringConverter}}"
                                      IsEnabled="{Binding IsSimulating, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                                                ValidatesOnNotifyDataErrors=True, Converter={StaticResource NegativeConverter}}"/>
+                                                ValidatesOnNotifyDataErrors=True, ValidatesOnExceptions=True,
+                                                Converter={StaticResource NegativeConverter}}"/>
                         </DockPanel>
 
                         <DockPanel >

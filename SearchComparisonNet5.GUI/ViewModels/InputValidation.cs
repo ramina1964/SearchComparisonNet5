@@ -6,17 +6,22 @@ namespace SearchComparisonNet5.GUI.ViewModels
 {
     public class InputValidation : AbstractValidator<MainViewModel>
     {
-        public InputValidation()
+        #region Constructor
+
+        public InputValidation() => Validate();
+
+        #endregion Constructor
+
+        private void Validate()
         {
             RuleSet("RuleForNoOfEntries", () =>
             {
                 _ = RuleFor(vm => vm.NoOfEntriesText)
                     .NotNull().NotEmpty()
                     .WithMessage(ProblemConstants.NullOrEmptyNoOfEntriesMsg)
-                    .Must(value => int.TryParse(value.ToString(), out _))
+                    .Must(noe => int.TryParse(noe, out var noOfEntries))
                     .WithMessage(ProblemConstants.InvalidNoOfEntriesMsg)
-                    .Must(value => ProblemConstants.MinNoOfEntries <= int.Parse(value, CultureInfo.InvariantCulture) &&
-                        int.Parse(value, CultureInfo.InvariantCulture) <= ProblemConstants.MaxNoOfEntries)
+                    .Must(noe => ProblemConstants.MinNoOfEntries <= int.Parse(noe) && int.Parse(noe) <= ProblemConstants.MaxNoOfEntries)
                     .WithMessage(ProblemConstants.OutOfRangeNoOfEntriesMsg);
             });
 
