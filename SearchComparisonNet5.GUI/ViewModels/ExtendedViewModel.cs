@@ -38,6 +38,6 @@ namespace SearchComparisonNet5.GUI.ViewModels
 
         protected void OnPropertyErrorsChanged(string p) => ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(p));
 
-        protected readonly Dictionary<string, List<string>> PropErrors = new Dictionary<string, List<string>>();
+        protected readonly Dictionary<string, List<string>> PropErrors = new();
     }
 }
