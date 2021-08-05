@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace SearchComparisonNet5.GUI.ViewModels
 {
@@ -42,10 +41,20 @@ namespace SearchComparisonNet5.GUI.ViewModels
             get => _isSimulating;
             set
             {
-                SetProperty(ref _isSimulating, value);
-                _ = Application.Current.Dispatcher.BeginInvoke(() => SimulateCommand.NotifyCanExecuteChanged());
-                _ = Application.Current.Dispatcher.BeginInvoke(() => CancelCommand.NotifyCanExecuteChanged());
+                var isSet = SetProperty(ref _isSimulating, value);
+
+                if (SetProperty(ref _isSimulating, value))
+                {
+                    SimulateCommand.NotifyCanExecuteChanged();
+                    CancelCommand.NotifyCanExecuteChanged();
+                }
             }
+        }
+
+        private void UpdateRelayCommands()
+        {
+            SimulateCommand.NotifyCanExecuteChanged();
+            CancelCommand.NotifyCanExecuteChanged();
         }
 
         public Visibility ProgressBarVisibility
