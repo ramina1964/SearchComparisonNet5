@@ -12,9 +12,9 @@ namespace SearchComparisonNet5.Tests
             BinarySut = new BinarySearch(DataGenerator);
         }
 
-        public LinearSearch LinearSut { get; set; }
+        public SearchBase LinearSut { get; set; }
 
-        public BinarySearch BinarySut { get; set; }
+        public SearchBase BinarySut { get; set; }
 
         public DataParameters DataParams { get; }
 

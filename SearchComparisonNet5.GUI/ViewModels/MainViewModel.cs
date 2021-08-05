@@ -287,9 +287,9 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 : sb.Append(BinarySearch[toIndex] + ", ");
         }
 
-        private LinearSearch LinearSearch { get; set; }
+        private SearchBase LinearSearch { get; set; }
 
-        private BinarySearch BinarySearch { get; set; }
+        private SearchBase BinarySearch { get; set; }
 
         public ValidationResult ValidationResult { get; set; }
 
