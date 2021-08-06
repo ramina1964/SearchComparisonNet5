@@ -14,23 +14,24 @@ namespace SearchComparisonNet5.GUI.ViewModels
 
         private void ValidationRules()
         {
-            // NoofEntries
+            // NoOfEntries
+            int noOfEntries = -1;
             _ = RuleFor(vm => vm.NoOfEntriesText)
                 .NotNull().NotEmpty()
                 .WithMessage(ProblemConstants.NullOrEmptyNoOfEntriesMsg)
-                .Must(noe => int.TryParse(noe, out var noOfEntries))
+                .Must(noe => int.TryParse(noe, out noOfEntries))
                 .WithMessage(ProblemConstants.InvalidNoOfEntriesMsg)
-                .Must(noe => ProblemConstants.MinNoOfEntries <= int.Parse(noe) && int.Parse(noe) <= ProblemConstants.MaxNoOfEntries)
+                .Must(_ => ProblemConstants.MinNoOfEntries <= noOfEntries && noOfEntries <= ProblemConstants.MaxNoOfEntries)
                 .WithMessage(ProblemConstants.OutOfRangeNoOfEntriesMsg);
 
-            // NoofSearches
+            // NoOfSearches
+            int noOfSearches = -1;
             _ = RuleFor(vm => vm.NoOfSearchesText)
                .NotNull().NotEmpty()
                .WithMessage(ProblemConstants.NullOrEmptyNoOfSearchesMsg)
-               .Must(value => int.TryParse(value.ToString(), out _))
+               .Must(nos => int.TryParse(nos, out noOfSearches))
                .WithMessage(ProblemConstants.InvalidNoOfSearchesMsg)
-               .Must(value => ProblemConstants.MinNoOfSearches <= int.Parse(value, CultureInfo.InvariantCulture) &&
-                   int.Parse(value, CultureInfo.InvariantCulture) <= ProblemConstants.MaxNoOfSearches)
+               .Must(_ => ProblemConstants.MinNoOfSearches <= noOfSearches && noOfSearches <= ProblemConstants.MaxNoOfSearches)
                .WithMessage(ProblemConstants.OutOfRangeNoOfSearchesMsg);
         }
     }

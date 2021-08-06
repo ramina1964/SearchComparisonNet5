@@ -12,19 +12,27 @@ namespace SearchComparisonNet5.GUI
     {
         public App()
         {
-            var services = new ServiceCollection();
-            ConfigureServices(services);
-            _serviceProvider = services.BuildServiceProvider();
+            Services = new ServiceCollection();
+            ConfigureServices(Services);
+            _serviceProvider = Services.BuildServiceProvider();
         }
+
+        public ServiceCollection Services { get; set; }
+
+        public IServiceCollection LinearSearch { get; set; }
+
+        public IServiceCollection BinarySearch { get; set; }
+
+        public IServiceCollection DataGenerator { get; set; }
 
         private void ConfigureServices(IServiceCollection services)
         {
-            _ = services.AddSingleton<DataParameters>();
-            _ = services.AddSingleton<IDataGenerator, DataGenerator>();
-            _ = services.AddSingleton<LinearSearch>();
-            _ = services.AddSingleton<BinarySearch>();
-            _ = services.AddSingleton<MainViewModel>();
-            _ = services.AddSingleton<MainView>();
+            _ = Services.AddSingleton<DataParameters>();
+            _ = Services.AddSingleton<IDataGenerator, DataGenerator>();
+            _ = Services.AddSingleton<LinearSearch>();
+            _ = Services.AddSingleton<BinarySearch>();
+            _ = Services.AddSingleton<MainViewModel>();
+            _ = Services.AddSingleton<MainView>();
         }
 
         private void OnStartup(object sender, StartupEventArgs e)
@@ -35,10 +43,5 @@ namespace SearchComparisonNet5.GUI
 
         private readonly IServiceProvider _serviceProvider;
 
-        public IServiceCollection LinearSearch { get; set; }
-
-        public IServiceCollection BinarySearch { get; set; }
-
-        public IServiceCollection DataGenerator { get; set; }
     }
 }
