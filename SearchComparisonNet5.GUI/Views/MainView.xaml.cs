@@ -16,7 +16,6 @@ namespace SearchComparisonNet5.GUI.Views
 
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
-
             DataContext = MainViewModel;
         }
     }

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using SearchComparisonNet5.Kernel.Models;
-using System.Globalization;
 
 namespace SearchComparisonNet5.GUI.ViewModels
 {
