@@ -13,25 +13,29 @@ namespace SearchComparisonNet5.GUI.ViewModels
 
         private void ValidationRules()
         {
-            // NoOfEntries
-            int noOfEntries = -1;
+            // NoOfEntriesText
             _ = RuleFor(vm => vm.NoOfEntriesText)
                 .NotNull().NotEmpty()
                 .WithMessage(ProblemConstants.NullOrEmptyNoOfEntriesMsg)
-                .Must(noe => int.TryParse(noe, out noOfEntries))
-                .WithMessage(ProblemConstants.InvalidNoOfEntriesMsg)
-                .Must(_ => ProblemConstants.MinNoOfEntries <= noOfEntries && noOfEntries <= ProblemConstants.MaxNoOfEntries)
+                .Must(noOfEntriesText => int.TryParse(noOfEntriesText, out var noOfEntries))
+                .WithMessage(ProblemConstants.InvalidNoOfEntriesMsg);
+
+            // NoOfEntries
+            _ = RuleFor(vm => vm.NoOfEntries)
+                .InclusiveBetween(ProblemConstants.MinNoOfEntries, ProblemConstants.MaxNoOfEntries)
                 .WithMessage(ProblemConstants.OutOfRangeNoOfEntriesMsg);
 
-            // NoOfSearches
-            int noOfSearches = -1;
+            // NoOfSearchesText
             _ = RuleFor(vm => vm.NoOfSearchesText)
                .NotNull().NotEmpty()
                .WithMessage(ProblemConstants.NullOrEmptyNoOfSearchesMsg)
-               .Must(nos => int.TryParse(nos, out noOfSearches))
-               .WithMessage(ProblemConstants.InvalidNoOfSearchesMsg)
-               .Must(_ => ProblemConstants.MinNoOfSearches <= noOfSearches && noOfSearches <= ProblemConstants.MaxNoOfSearches)
-               .WithMessage(ProblemConstants.OutOfRangeNoOfSearchesMsg);
+               .Must(noOfSearchesText => int.TryParse(noOfSearchesText, out var noOfSearches))
+               .WithMessage(ProblemConstants.InvalidNoOfSearchesMsg);
+
+            // NoOfSearches
+            _ = RuleFor(vm => vm.NoOfSearches)
+                .InclusiveBetween(ProblemConstants.MinNoOfSearches, ProblemConstants.MaxNoOfSearches)
+                .WithMessage(ProblemConstants.OutOfRangeNoOfSearchesMsg);
         }
     }
 }
