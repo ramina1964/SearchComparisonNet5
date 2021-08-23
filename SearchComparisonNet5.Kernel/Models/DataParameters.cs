@@ -2,11 +2,6 @@
 {
     public class DataParameters
     {
-        public DataParameters()
-        {
-            NoOfEntries = ProblemConstants.InitialNoOfEntries;
-        }
-
         public DataParameters(int noOfEntries)
         {
             NoOfEntries = noOfEntries;
