@@ -7,9 +7,6 @@ namespace SearchComparisonNet5.Kernel.Models
         public BinarySearch(IDataGenerator dataGen) : base(dataGen) { }
 
         public override ISearchItem FindItem(int value)
-        { return FindItemWithBinarySearch(value); }
-
-        private ISearchItem FindItemWithBinarySearch(int value)
         {
             const int noOfIterations = 0;
             return FindItemWithBinarySearch(0, NoOfEntries - 1, value, noOfIterations);
@@ -19,6 +16,7 @@ namespace SearchComparisonNet5.Kernel.Models
         {
             noOfIterations++;
 
+            // Value is non-existant, initialize and return new SearchItem with TargetIndex = null.
             if (low > high)
             {
                 return new SearchItem()
@@ -29,6 +27,7 @@ namespace SearchComparisonNet5.Kernel.Models
                 };
             }
 
+            // Value is found, initialize and return new SearchItem for this value.
             var mid = (low + high) / 2;
             if (Data[mid] == value)
             {
@@ -40,6 +39,7 @@ namespace SearchComparisonNet5.Kernel.Models
                 };
             }
 
+            // Throw away half of the list based on value of Data[mid] and continue searching in the remaining list.
             return Data[mid] > value
                 ? FindItemWithBinarySearch(low, mid - 1, value, noOfIterations)
                 : FindItemWithBinarySearch(mid + 1, high, value, noOfIterations);

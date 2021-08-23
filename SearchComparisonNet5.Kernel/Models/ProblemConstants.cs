@@ -7,19 +7,19 @@
 
         public static int InitialNoOfEntries => 500_000;
 
-        public static int MaxNoOfEntries => 1000_000;
+        public static int MaxNoOfEntries => 50_000_000;
 
         // Entry Values 
         public static int MinEntryValue => 0;
 
-        public static int MaxEntryValue => (5 * InitialNoOfEntries) - 1;
+        public static int MaxEntryValue => (5 * MaxNoOfEntries) - 1;
 
         // No of Searches
         public static int MinNoOfSearches => 1000;
 
         public static int InitialNoOfSearches => 5_000;
 
-        public static int MaxNoOfSearches => 20_000;
+        public static int MaxNoOfSearches => 500_000;
 
         public static string NullOrEmptyNoOfEntriesMsg => "NoOfEntriesText is a required field.";
 

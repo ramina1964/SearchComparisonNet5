@@ -4,7 +4,9 @@ namespace SearchComparisonNet5.Kernel.Interfaces
 {
     public interface IDataGenerator
     {
-        int NoOfEntries { get; }
+        int NoOfEntries { get; set; }
+
+        int NoOfSearches { get; set; }
 
         int MinValue { get; }
 
