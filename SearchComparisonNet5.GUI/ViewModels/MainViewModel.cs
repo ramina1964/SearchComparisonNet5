@@ -81,20 +81,20 @@ namespace SearchComparisonNet5.GUI.ViewModels
             set
             {
                 _ = SetProperty(ref _noOfEntriesText, value);
-                IsInputValid = InputValidation.Validate(this).IsValid;
+                var properties = new[] { nameof(NoOfEntriesText) };
+                IsNoOfEntriesValid = InputValidation.Validate(this, context => context.IncludeProperties(properties)).IsValid;
+                OnPropertyChanged(nameof(IsInputValid));
+                UpdateButtonFunctionality();
 
-                if (!IsInputValid)
+                if (!IsNoOfEntriesValid)
                 {
                     IsSimulating = false;
                     return;
                 }
 
-                // Here: IsInputValid == true;
+                // Here: IsNoOfEntriesValid == true;
                 _ = int.TryParse(value, out int noOfEntries);
                 NoOfEntries = noOfEntries;
-                OnPropertyChanged(nameof(NoOfEntries));
-
-                UpdateButtonFunctionality();
             }
         }
 
@@ -104,18 +104,20 @@ namespace SearchComparisonNet5.GUI.ViewModels
             set
             {
                 _ = SetProperty(ref _noOfSearchesText, value);
-                IsInputValid = InputValidation.Validate(this).IsValid;
+                var properties = new[] { nameof(NoOfSearches) };
+                IsNoOfSearchesValid = InputValidation.Validate(this, context => context.IncludeProperties(properties)).IsValid;
+                OnPropertyChanged(nameof(IsInputValid));
+                UpdateButtonFunctionality();
 
-                if (!IsInputValid)
+                if (!IsNoOfSearchesValid)
                 {
                     IsSimulating = false;
                     return;
                 }
 
-                // Here: IsInputValid == true;
+                // Here: IsNoOfSearchesValid == true;
                 _ = int.TryParse(value, out int noOfSearches);
                 NoOfSearches = noOfSearches;
-                UpdateButtonFunctionality();
             }
         }
 
@@ -190,7 +192,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
         {
             var dataParams = new DataParameters(NoOfEntries);
             var dataGen = new DataGenerator(dataParams);
-            
+
             LinearSearch = new LinearSearch(dataGen);
             BinarySearch = new BinarySearch(dataGen);
 
@@ -298,17 +300,19 @@ namespace SearchComparisonNet5.GUI.ViewModels
 
         private SearchBase BinarySearch { get; set; }
 
-        private bool IsInputValid
+        private bool IsNoOfEntriesValid
         {
-            get => _isInputValid;
-            set
-            {
-                if (SetProperty(ref _isInputValid, value))
-                {
-                    UpdateButtonFunctionality();
-                }
-            }
+            get => _isNoOfEntriesValid;
+            set => SetProperty(ref _isNoOfEntriesValid, value);
         }
+
+        private bool IsNoOfSearchesValid
+        {
+            get => _isNoOfSearchesValid;
+            set => SetProperty(ref _isNoOfSearchesValid, value);
+        }
+
+        private bool IsInputValid => IsNoOfEntriesValid && IsNoOfEntriesValid;
 
         /***************************************** Private Fields ******************************************/
         private static readonly long MinProductValue = (long)1e5;
@@ -321,7 +325,6 @@ namespace SearchComparisonNet5.GUI.ViewModels
         private string _noOfSearchesText;
         private int _noOfEntries;
         private int _noOfSearches;
-        private bool _isInputValid;
         private bool _isSimulating;
         private Visibility _progressBarVisibility;
         private double _progressBarValue;
@@ -330,5 +333,8 @@ namespace SearchComparisonNet5.GUI.ViewModels
         private double _linearAvgElapsedTime;
         private double _binaryAvgNoOfIterations;
         private double _binaryAvgElapsedTime;
+        private bool _isNoOfEntriesValid;
+        private bool _isNoOfSearchesValid;
+        private bool _isInputValid;
     }
 }
