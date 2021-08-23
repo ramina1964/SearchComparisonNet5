@@ -12,6 +12,7 @@ namespace SearchComparisonNet5.Kernel.Models
             return FindItemWithBinarySearch(0, NoOfEntries - 1, value, noOfIterations);
         }
 
+        // Remember: The array is sorted ascendingly
         private ISearchItem FindItemWithBinarySearch(int low, int high, int value, int noOfIterations)
         {
             noOfIterations++;

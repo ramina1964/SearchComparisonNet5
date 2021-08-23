@@ -42,6 +42,5 @@ namespace SearchComparisonNet5.GUI
         }
 
         public static IServiceProvider ServiceProvider;
-
     }
 }

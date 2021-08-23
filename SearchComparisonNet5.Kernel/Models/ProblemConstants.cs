@@ -3,21 +3,21 @@
     public static class ProblemConstants
     {
         // No of Entries
-        public static int MinNoOfEntries => 10000;
+        public static int MinNoOfEntries => 100_00;
 
-        public static int InitialNoOfEntries => 500000;
+        public static int InitialNoOfEntries => 500_000;
 
-        public static int MaxNoOfEntries => 50000000;
+        public static int MaxNoOfEntries => 50_000_000;
 
         // Entry Values 
         public static int MinEntryValue => 0;
 
         // No of Searches
-        public static int MinNoOfSearches => 1000;
+        public static int MinNoOfSearches => 1_000;
 
-        public static int InitialNoOfSearches => 5000;
+        public static int InitialNoOfSearches => 5_000;
 
-        public static int MaxNoOfSearches => 500000;
+        public static int MaxNoOfSearches => 5_00_000;
 
         public static string NullOrEmptyNoOfEntriesMsg => "NoOfEntriesText is a required field.";
 

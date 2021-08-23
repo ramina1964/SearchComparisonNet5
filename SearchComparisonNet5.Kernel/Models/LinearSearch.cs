@@ -10,10 +10,12 @@ namespace SearchComparisonNet5.Kernel.Models
             Data = dataGen.GenerateData();
         }
 
+        // Remember: The array is sorted ascendingly
         public override ISearchItem FindItem(int value)
         {
             int? targetIndex = null;
             var noOfIterations = 0;
+
             for (var i = 0; i < NoOfEntries; i++)
             {
                 noOfIterations++;

@@ -104,7 +104,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
             set
             {
                 _ = SetProperty(ref _noOfSearchesText, value);
-                var properties = new[] { nameof(NoOfSearches) };
+                var properties = new[] { nameof(NoOfSearchesText) };
                 IsNoOfSearchesValid = InputValidation.Validate(this, context => context.IncludeProperties(properties)).IsValid;
                 OnPropertyChanged(nameof(IsInputValid));
                 UpdateButtonFunctionality();
@@ -136,7 +136,6 @@ namespace SearchComparisonNet5.GUI.ViewModels
         public int TargetValue
         {
             get => _targetValue;
-
             set
             {
                 var valid = int.TryParse(value.ToString(), out int result);
@@ -312,7 +311,7 @@ namespace SearchComparisonNet5.GUI.ViewModels
             set => SetProperty(ref _isNoOfSearchesValid, value);
         }
 
-        private bool IsInputValid => IsNoOfEntriesValid && IsNoOfEntriesValid;
+        private bool IsInputValid => IsNoOfEntriesValid && IsNoOfSearchesValid;
 
         /***************************************** Private Fields ******************************************/
         private static readonly long MinProductValue = (long)1e5;

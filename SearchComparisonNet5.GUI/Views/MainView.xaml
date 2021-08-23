@@ -38,14 +38,6 @@
                     <StackPanel Orientation="Vertical" Margin="0, 5, 0, 0">
                         <DockPanel>
                             <Label Style="{StaticResource LabelStyle}" Content="No. of Entries"/>
-
-                            <!--<TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="55"
-                                     Text="{Binding NoOfEntriesText, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                                            ValidatesOnNotifyDataErrors=True, ValidatesOnExceptions=True}"
-                                     IsEnabled="{Binding IsSimulating, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
-                                                ValidatesOnNotifyDataErrors=True, ValidatesOnExceptions=True,
-                                                Converter={StaticResource NegativeConverter}}"/>-->
-
                             <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="55"
                                      Text="{Binding NoOfEntriesText, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                             ValidatesOnNotifyDataErrors=True, Converter={StaticResource NumStringConverter}}"
@@ -57,8 +49,8 @@
                         <DockPanel >
                             <Label Style="{StaticResource LabelStyle}" Content="No. of Searches" />
                             <TextBox Style="{StaticResource TextErrorStyle}" DockPanel.Dock="Right" Width ="55"
-                                     Text="{Binding NoOfSearchesText, Mode=TwoWay, UpdateSourceTrigger=LostFocus, ValidatesOnNotifyDataErrors=True,
-                                            Converter={StaticResource NumStringConverter}}"
+                                     Text="{Binding NoOfSearchesText, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
+                                            ValidatesOnNotifyDataErrors=True, Converter={StaticResource NumStringConverter}}"
                                      IsEnabled="{Binding IsSimulating, Mode=TwoWay, UpdateSourceTrigger=LostFocus,
                                                 ValidatesOnNotifyDataErrors=True, Converter={StaticResource NegativeConverter}}" />
                         </DockPanel>
