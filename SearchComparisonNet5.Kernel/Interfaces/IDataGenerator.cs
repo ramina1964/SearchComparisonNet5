@@ -6,7 +6,7 @@ namespace SearchComparisonNet5.Kernel.Interfaces
     {
         int NoOfEntries { get; set; }
 
-        int NoOfSearches { get; set; }
+        //int NoOfSearches { get; set; }
 
         int MinValue { get; }
 

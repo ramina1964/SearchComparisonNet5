@@ -22,7 +22,7 @@ namespace SearchComparisonNet5.Kernel.Models
         public Random Random { get; }
 
         #region IDataGenerator
-        public int NoOfEntries { get; }
+        public int NoOfEntries { get; set; }
 
         public int MinValue { get; }
 
