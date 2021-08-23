@@ -12,12 +12,10 @@ namespace SearchComparisonNet5.GUI.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        public MainViewModel(LinearSearch linearSearch, BinarySearch binarySearch)
+        public MainViewModel()
         {
             SimulateCommand = new RelayCommand(Simulate, CanSimulate);
             CancelCommand = new RelayCommand(Cancel, CanCancel);
-            LinearSearch = linearSearch;
-            BinarySearch = binarySearch;
 
             InputValidation = new InputValidation() { CascadeMode = CascadeMode.Stop };
             NoOfEntriesText = ProblemConstants.InitialNoOfEntries.ToString();
@@ -92,7 +90,10 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 }
 
                 // Here: IsInputValid == true;
-                NoOfEntries = int.Parse(value);
+                _ = int.TryParse(value, out int noOfEntries);
+                NoOfEntries = noOfEntries;
+                OnPropertyChanged(nameof(NoOfEntries));
+
                 UpdateButtonFunctionality();
             }
         }
@@ -112,7 +113,8 @@ namespace SearchComparisonNet5.GUI.ViewModels
                 }
 
                 // Here: IsInputValid == true;
-                NoOfSearches = int.Parse(value);
+                _ = int.TryParse(value, out int noOfSearches);
+                NoOfSearches = noOfSearches;
                 UpdateButtonFunctionality();
             }
         }
@@ -186,6 +188,12 @@ namespace SearchComparisonNet5.GUI.ViewModels
 
         private async void Simulate()
         {
+            var dataParams = new DataParameters(NoOfEntries);
+            var dataGen = new DataGenerator(dataParams);
+            
+            LinearSearch = new LinearSearch(dataGen);
+            BinarySearch = new BinarySearch(dataGen);
+
             IsSimulating = true;
             LinearSearchResults = await SimulateLinearSearchAsync();
             BinarySearchResults = await SimulateBinarySearchAsync();

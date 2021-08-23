@@ -13,7 +13,7 @@ namespace SearchComparisonNet5.Kernel.Models
             Data = dataGen.Data;
         }
 
-        public int NoOfEntries { get; }
+        public int NoOfEntries { get; set; }
 
         public Func<int> NextRandomNo { get; }
 

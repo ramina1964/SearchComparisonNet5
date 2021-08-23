@@ -4,7 +4,11 @@ namespace SearchComparisonNet5.Kernel.Models
 {
     public sealed class LinearSearch : SearchBase
     {
-        public LinearSearch(IDataGenerator dataGen) : base(dataGen) { }
+        public LinearSearch(IDataGenerator dataGen) : base(dataGen)
+        {
+            NoOfEntries = dataGen.NoOfEntries;
+            Data = dataGen.GenerateData();
+        }
 
         public override ISearchItem FindItem(int value)
         {

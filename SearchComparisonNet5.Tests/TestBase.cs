@@ -6,7 +6,7 @@ namespace SearchComparisonNet5.Tests
     {
         public TestBase()
         {
-            DataParameters = new DataParameters();
+            DataParameters = new DataParameters(ProblemConstants.InitialNoOfEntries);
             DataGenerator = new DataGenerator(DataParameters);
             LinearSut = new LinearSearch(DataGenerator);
             BinarySut = new BinarySearch(DataGenerator);
